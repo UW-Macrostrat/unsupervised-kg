@@ -161,6 +161,7 @@ cython_debug/
 
 *.csv
 *.json
+*.html
 
 # General
 .DS_Store

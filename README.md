@@ -26,3 +26,41 @@ JOIN lith_atts la
 ## REBEL based knowledgre graph extraction
 
 To extract relationships from the text corpus, we utilize the REBEL model: [https://github.com/Babelscape/rebel](https://github.com/Babelscape/rebel) which is a seq2sel model for relationship extraction.
+In the `rebel_kg` directory, you can use the `kg_runner.py` to generate a knowledge graph for a text corpus. Running `python kg_runner.py --help` you can see the arguments to pass to generate the kg:
+```
+usage: kg_runner.py [-h] [--directory DIRECTORY] [--file FILE] [--processes PROCESSES] [--num_files NUM_FILES] --save SAVE
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --directory DIRECTORY
+                        The directory containing the text corpus we want to process
+  --file FILE           The file we want to generate the kg for
+  --processes PROCESSES
+                        Number of process we want running
+  --num_files NUM_FILES
+                        Number of files in the directory we want to save
+  --save SAVE           The html file we want to save the network in
+```
+
+Alongside saving the html file, it will also save a csv file representing the knowledge graph in the same directory as the html. An example of running the command for a directory: 
+```
+$ python kg_runner.py --directory /ssd/dsarda/geoarchive_datasets/filtered_geoarchive_text/ --save /ssd/dsarda/geoarchive_datasets/filtered_results/temp.html --num_files 2 --processes 2`
+```
+This will use 2 processes to procecess 2 files from the `/ssd/dsarda/geoarchive_datasets/filtered_geoarchive_text/` directory and will save the kg network to `/ssd/dsarda/geoarchive_datasets/filtered_results/temp.html` as well as a csv file representing the kg to `/ssd/dsarda/geoarchive_datasets/filtered_results/temp.csv`
+
+Similarily, to run for the provided example file, you can use the command:
+```
+$ python kg_runner.py --file example.txt --save example.html
+```
+
+The example file contains the sentence, "Jaguar is a Canadian-listed junior gold mining, development, and exploration company operating in Brazil with three gold mining complexes and a large land package covering approximately 20,000 ha." which results in a Knowledge Graph in the html file of:
+
+![Example Knowledge Graph](images/example_graph.png)
+
+It also produce the following csv file:
+```
+src,type,dst,article_id,sentence
+Jaguar,country,Canadian,example,"Jaguar is a Canadian-listed junior gold mining, development, and exploration company operating in Brazil with three gold mining complexes and a large land package covering approximately 20,000 ha."
+junior,subclass of,mining,example,"Jaguar is a Canadian-listed junior gold mining, development, and exploration company operating in Brazil with three gold mining complexes and a large land package covering approximately 20,000 ha."
+Jaguar,product or material produced,gold,example,"Jaguar is a Canadian-listed junior gold mining, development, and exploration company operating in Brazil with three gold mining complexes and a large land package covering approximately 20,000 ha."
+```
