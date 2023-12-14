@@ -162,6 +162,12 @@ cython_debug/
 *.csv
 *.json
 *.html
+*.tsv
+*.cache
+*.jsonl
+*.txt
+!rebel_kg/example.txt
+rebel_finetuning/src/outputs
 
 # General
 .DS_Store

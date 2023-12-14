@@ -1,5 +1,0 @@
-pandas
-transformers
-pyvis
-torch
-argparse
