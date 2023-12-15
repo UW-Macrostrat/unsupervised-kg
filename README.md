@@ -99,3 +99,7 @@ Running this for example text, "The formation consists of massive and cross-bedd
 ![Finetuned Example Graph](images/finetuned_kg.jpg)
 
 where the relationships type are custom defined relationships we have included in our training set. 
+
+## Seq2Rel Training
+
+We noticed that even after finetuning that some of the uncommon terms were not being recognized so that we decided to use, [seqrel](https://github.com/JohnGiorgi/seq2rel) which allows us to do entity hinting and specify the term that we care about. We first reformatted the rebel dataset using the `seq_to_rel/create_dataset.py` and then trained the model using `seq_to_rel/training.py`. 

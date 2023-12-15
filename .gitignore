@@ -171,6 +171,8 @@ cython_debug/
 rebel_finetuning/data
 rebel_finetuning/src/outputs
 rebel_finetuning/model
+seq_to_rel/data
+seq_to_rel/output
 
 # General
 .DS_Store
