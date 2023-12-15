@@ -4,10 +4,12 @@ num_workers: 8
 dataset_name: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/datasets/archive.py'
 text_column: 'context'
 target_column: 'triplets'
-train_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/rebel/sample.jsonl'
-validation_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/rebel/sample.jsonl'
-test_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/rebel/sample.jsonl'
+train_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/archive/train.txt'
+validation_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/archive/valid.txt'
+test_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/archive/test.txt'
 token_terms: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/archive/archive_token_terms.txt'
+save_dir: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/src/results'
+checkpoint_path: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/src/results/finetuning.ckpt'
 overwrite_cache: False
 preprocessing_num_workers: 
 max_source_length: 256

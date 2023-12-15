@@ -1,12 +1,12 @@
 # @package _global_
 
 num_workers: 8
-dataset_name: '/home/martinez/rebel/datasets/rebel-short.py'
+dataset_name: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/datasets/rebel-short.py'
 text_column: 'context'
 target_column: 'triplets'
-train_file: '/home/martinez/rebel/data/rebel/en_train.jsonl'
-validation_file: '/home/martinez/rebel/data/rebel/en_val.jsonl'
-test_file: '/home/martinez/rebel/data/rebel/en_test.jsonl'
+train_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/rebel/sample.jsonl'
+validation_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/rebel/sample.jsonl'
+test_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/rebel/sample.jsonl'
 overwrite_cache: False
 preprocessing_num_workers: 
 max_source_length: 256
@@ -20,4 +20,4 @@ num_beams:
 eval_beams: 3
 ignore_pad_token_for_loss: True
 source_prefix: 
-relations_file: '/home/martinez/rebel/data/relations_count.tsv'
+relations_file: '/ssd/dsarda/unsupervised-kg/rebel_finetuning/data/rebel/relations_count.tsv'

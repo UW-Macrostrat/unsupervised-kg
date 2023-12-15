@@ -70,39 +70,10 @@ def train(conf: omegaconf.DictConfig) -> None:
     print("Resized model for", len(tokenizer), "tokens")
     pl_data_module = BasePLDataModule(conf, tokenizer, model)
     pl_module = BasePLModule(conf, config, tokenizer, model)
-    logger = CSVLogger(save_dir = "logs", name = conf.model_name_or_path.split('/')[-1])
 
-    callbacks_store = []
-    callbacks_store.append(
-        ModelCheckpoint(
-            monitor=conf.monitor_var,
-            # monitor=None,
-            dirpath=f'{config.save_dir}/{conf.model_name}',
-            save_top_k=conf.save_top_k,
-            verbose=True,
-            save_last=True,
-            mode=conf.monitor_var_mode
-        )
-    )
-
-    # trainer
-    trainer = pl.Trainer(
-        gpus = conf.gpus,
-        accumulate_grad_batches=conf.gradient_acc_steps,
-        gradient_clip_val=conf.gradient_clip_value,
-        val_check_interval=conf.val_check_interval,
-        callbacks=callbacks_store,
-        max_steps=conf.max_steps,
-        # max_steps=total_steps,
-        precision=conf.precision,
-        amp_level=conf.amp_level,
-        logger = logger,
-        resume_from_checkpoint=conf.checkpoint_path,
-        limit_val_batches=conf.val_percent_check
-    )
-
-    # module fit
-    trainer.fit(pl_module, datamodule=pl_data_module)
+    model = pl_module.load_from_checkpoint(checkpoint_path = conf.checkpoint_path, config = config, tokenizer = tokenizer, model = model)
+    model.model.save_pretrained('../model/archive_tuned')
+    model.tokenizer.save_pretrained('../model/archive_tuned')
 
 @hydra.main(config_path='../conf', config_name='root')
 def main(conf: omegaconf.DictConfig):

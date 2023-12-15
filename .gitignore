@@ -166,8 +166,11 @@ cython_debug/
 *.cache
 *.jsonl
 *.txt
+*.safetensors
 !rebel_kg/example.txt
+rebel_finetuning/data
 rebel_finetuning/src/outputs
+rebel_finetuning/model
 
 # General
 .DS_Store

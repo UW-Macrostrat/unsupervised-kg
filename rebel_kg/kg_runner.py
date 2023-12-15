@@ -34,9 +34,9 @@ def run_for_file(model, tokenizer, file_path):
     return combined_kg
 
 # This is run by each process concurrently
-def run_for_multiple_files(all_files, share_queue):
-    tokenizer = AutoTokenizer.from_pretrained("Babelscape/rebel-large")
-    model = AutoModelForSeq2SeqLM.from_pretrained("Babelscape/rebel-large")
+def run_for_multiple_files(all_files, share_queue, model_path):
+    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
 
     merged_kg = KG()
     for curr_file in all_files:
@@ -48,7 +48,7 @@ def run_for_multiple_files(all_files, share_queue):
 
     share_queue.put(merged_kg)
 
-def run_for_directory(dir_path, num_process, num_files):
+def run_for_directory(dir_path, num_process, num_files, model_path):
     # Get the files we want to process
     all_dir_files = []
     for file_name in os.listdir(dir_path):
@@ -74,7 +74,7 @@ def run_for_directory(dir_path, num_process, num_files):
     for idx, process_files in enumerate(files_per_process):
         process_files = list(process_files)
         print("Process", idx, "is processing", len(process_files), "files")
-        curr_process = multiprocessing.Process(target = run_for_multiple_files, args = (process_files, share_queue, ))
+        curr_process = multiprocessing.Process(target = run_for_multiple_files, args = (process_files, share_queue, model_path, ))
         curr_process.start()
         running_processes.append(curr_process)
     
@@ -93,12 +93,13 @@ def run_for_directory(dir_path, num_process, num_files):
     return all_kg 
 
 def read_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--directory', type= str, default = "", help = "The directory containing the text corpus we want to process")
     parser.add_argument('--file', type= str, default = "", help = "The file we want to generate the kg for")
     parser.add_argument('--processes', type = int, default = 1, help = "Number of process we want running")
     parser.add_argument('--num_files', type = int, default = -1, help = "Number of files in the directory we want to save")
     parser.add_argument('--save', type = str, required = True, help = "The html file we want to save the network in")
+    parser.add_argument('--model_path', type = str, default = "Babelscape/rebel-large", help = "The model we want to use for generating kg")
     return parser.parse_args()
 
 def save_kg(kg, save_path):
@@ -149,9 +150,9 @@ def main():
         raise argparse.ArgumentTypeError('Either a file or directory must be specified')
 
     if len(args.directory) > 0:
-        result_kg = run_for_directory(args.directory, args.processes, args.files)
+        result_kg = run_for_directory(args.directory, args.processes, args.files, args.model_path)
     else:
-        result_kg = run_for_multiple_files([args.file], None)
+        result_kg = run_for_multiple_files([args.file], None, args.model_path)
 
     save_kg(result_kg, args.save)
 

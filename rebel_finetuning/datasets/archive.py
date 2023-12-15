@@ -21,7 +21,7 @@ from __future__ import absolute_import, division, print_function
 import pandas as pd
 
 import datasets
-
+import os
 import re 
 import json
 import logging
@@ -31,13 +31,6 @@ from collections import defaultdict
 _DESCRIPTION = """\
 REBEL is a silver dataset created for the paper REBEL: Relation Extraction By End-to-end Language generation
 """
-
-_URL = ""
-_URLS = {
-    "train": _URL + "en_train.jsonl",
-    "dev": _URL + "en_val.jsonl",
-    "test": _URL + "en_test.jsonl",
-}
 
 class ArchiveConfig(datasets.BuilderConfig):
     """BuilderConfig for REBEL."""
@@ -80,16 +73,12 @@ class Archive(datasets.GeneratorBasedBuilder):
         )
 
     def _split_generators(self, dl_manager):
-        if self.config.data_files:
-            downloaded_files = {
-                "train": self.config.data_files["train"], # self.config.data_dir + "en_train.jsonl",
-                "dev": self.config.data_files["dev"], #self.config.data_dir + "en_val.jsonl",
-                "test": self.config.data_files["test"], #self.config.data_dir + "en_test.jsonl",
-            }
-        else:
-            downloaded_files = dl_manager.download_and_extract(_URLS)
+        downloaded_files = {
+            "train": self.config.data_files["train"], 
+            "dev": self.config.data_files["dev"], 
+            "test": self.config.data_files["test"], 
+        }
 
-        print("Generating split from", downloaded_files)
         return [
             datasets.SplitGenerator(name=datasets.Split.TRAIN, gen_kwargs={"filepath": downloaded_files["train"]}),
             datasets.SplitGenerator(name=datasets.Split.VALIDATION, gen_kwargs={"filepath": downloaded_files["dev"]}),
@@ -98,52 +87,28 @@ class Archive(datasets.GeneratorBasedBuilder):
 
     def _generate_examples(self, filepath):
         """This function returns the examples in the raw (text) form."""
+        filepath = filepath[0]
         logging.info("generating examples from = %s", filepath)
-        relations_df = pd.read_csv(self.config.data_files['relations'], header = None, sep='\t')
-        relations = list(relations_df[0])
+        dir_path = os.path.dirname(filepath)
 
         with open(filepath, encoding="utf-8") as f:
-            for id_, row in enumerate(f):
-                article = json.loads(row)
-                prev_len = 0
-                if len(article['triples']) == 0:
-                    continue
-                count = 0
-                for text_paragraph in article['text'].split('\n'):
-                    if len(text_paragraph) == 0:
-                        continue
-                    sentences = re.split(r'(?<=[.])\s', text_paragraph)
-                    text = ''
-                    for sentence in sentences:
-                        text += sentence + ' '
-                        if any([entity['boundaries'][0] < len(text) + prev_len < entity['boundaries'][1] for entity in article['entities']]):
-                            continue
-                        entities = sorted([entity for entity in article['entities'] if prev_len < entity['boundaries'][1] <= len(text)+prev_len], key=lambda tup: tup['boundaries'][0])
-                        decoder_output = '<triplet> '
-                        for int_ent, entity in enumerate(entities):
-                            triplets = sorted([triplet for triplet in article['triples'] if triplet['subject'] == entity and prev_len< triplet['subject']['boundaries'][1]<=len(text) + prev_len and prev_len< triplet['object']['boundaries'][1]<=len(text)+ prev_len and triplet['predicate']['surfaceform'] in relations], key=lambda tup: tup['object']['boundaries'][0])
-                            if len(triplets) == 0:
-                                continue
-                            decoder_output += entity['surfaceform'] + ' <subj> '
-                            for triplet in triplets:
-                                decoder_output += triplet['object']['surfaceform'] + ' <obj> '  + triplet['predicate']['surfaceform'] + ' <subj> '
-                            decoder_output = decoder_output[:-len(' <subj> ')]
-                            decoder_output += ' <triplet> '
-                        decoder_output = decoder_output[:-len(' <triplet> ')]
-                        count += 1
-                        prev_len += len(text)
+            lines = f.readlines()
+            for file_idx, curr_line in enumerate(lines):
+                # Read in the dataframe
+                curr_line = curr_line.strip()
+                df_path = os.path.join(dir_path, curr_line)
+                df = pd.read_csv(df_path).astype(str)
 
-                        if len(decoder_output) == 0:
-                            text = ''
-                            continue
+                for row_idx, row in df.iterrows():
+                    data_id = str(row["doc_id"]) + "_" + str(row_idx)
+                    title = row["title"]
+                    text = row["text"]
+                    src_txt, dst_txt, type_txt = row["src"], row["dst"], row["type"]
+                    triplet_txt = f"<triplet> {src_txt} <subj> {dst_txt} <obj> {type_txt}"
 
-                        text = re.sub('([\[\].,!?()])', r' \1 ', text.replace('()', ''))
-                        text = re.sub('\s{2,}', ' ', text)
-
-                        yield article['uri'] + '-' + str(count), {
-                            "title": article['title'],
-                            "context": text,
-                            "id": article['uri'] + '-' + str(count),
-                            "triplets": decoder_output,
-                        }
-                        text = ''
+                    yield data_id, {
+                        "title" : title,
+                        "context" : text,
+                        "id" : data_id,
+                        "triplets" : triplet_txt
+                    }

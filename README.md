@@ -26,18 +26,20 @@ JOIN lith_atts la
 To extract relationships from the text corpus, we utilize the REBEL model: [https://github.com/Babelscape/rebel](https://github.com/Babelscape/rebel) which is a seq2sel model for relationship extraction.
 In the `rebel_kg` directory, you can use the `kg_runner.py` to generate a knowledge graph for a text corpus. Running `python kg_runner.py --help` you can see the arguments to pass to generate the kg:
 ```
-usage: kg_runner.py [-h] [--directory DIRECTORY] [--file FILE] [--processes PROCESSES] [--num_files NUM_FILES] --save SAVE
+usage: kg_runner.py [-h] [--directory DIRECTORY] [--file FILE] [--processes PROCESSES] [--num_files NUM_FILES] --save SAVE [--model_path MODEL_PATH]
 
 optional arguments:
   -h, --help            show this help message and exit
   --directory DIRECTORY
-                        The directory containing the text corpus we want to process
-  --file FILE           The file we want to generate the kg for
+                        The directory containing the text corpus we want to process (default: )
+  --file FILE           The file we want to generate the kg for (default: )
   --processes PROCESSES
-                        Number of process we want running
+                        Number of process we want running (default: 1)
   --num_files NUM_FILES
-                        Number of files in the directory we want to save
-  --save SAVE           The html file we want to save the network in
+                        Number of files in the directory we want to save (default: -1)
+  --save SAVE           The html file we want to save the network in (default: None)
+  --model_path MODEL_PATH
+                        The model we want to use for generating kg (default: Babelscape/rebel-large)
 ```
 
 Alongside saving the html file, it will also save a csv file representing the knowledge graph in the same directory as the html. An example of running the command for a directory: 
@@ -51,9 +53,9 @@ Similarily, to run for the provided example file, you can use the command:
 $ python kg_runner.py --file example.txt --save example.html
 ```
 
-The example file contains the sentence, "Jaguar is a Canadian-listed junior gold mining, development, and exploration company operating in Brazil with three gold mining complexes and a large land package covering approximately 20,000 ha." which results in a Knowledge Graph in the html file of:
+The example file contains the sentence, "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions." which results in a Knowledge Graph in the html file of:
 
-![Example Knowledge Graph](images/example_graph.png)
+![Example Knowledge Graph](images/example_kg.jpg)
 
 It also produce the following csv file:
 ```
@@ -90,3 +92,10 @@ This knowledge graph is generated which completely ignores the term dolomite:
 
 
 Thus, we try to finetune the REBEL model so that it recognizes these terms. The `rebel_finetuning` directory is based on the [original rebel repo](https://github.com/Babelscape/rebel). 
+
+We first generate a finetuning dataset using the Snippets API in `rebel_finetuning/dataset_creator.py` for the edges generated from running `macrostrat_db/database_explorer.ipynb`. We then finetune the dataset using `rebel_finetuning/src/finetune.py` and then convert it to a hugging face model using `rebel_finetuning/src/checkpoint_to_model.py`. To generate the kg using the finetuned model, pass the directory that the model is saved in to `kg_runner.py` using the `model_path` argument. 
+
+Running this for example text, "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions.", we get the output knowledge graph:
+![Finetuned Example Graph](images/finetuned_kg.jpg)
+
+where the relationships type are custom defined relationships we have included in our training set. 

@@ -99,10 +99,10 @@ class Rebel(datasets.GeneratorBasedBuilder):
     def _generate_examples(self, filepath):
         """This function returns the examples in the raw (text) form."""
         logging.info("generating examples from = %s", filepath)
-        relations_df = pd.read_csv(self.config.data_files['relations'], header = None, sep='\t')
+        relations_df = pd.read_csv(self.config.data_files['relations'][0], header = None, sep='\t')
         relations = list(relations_df[0])
 
-        with open(filepath, encoding="utf-8") as f:
+        with open(filepath[0], encoding="utf-8") as f:
             for id_, row in enumerate(f):
                 article = json.loads(row)
                 prev_len = 0
