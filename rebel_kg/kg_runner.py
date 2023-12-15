@@ -102,6 +102,10 @@ def read_args():
     parser.add_argument('--model_path', type = str, default = "Babelscape/rebel-large", help = "The model we want to use for generating kg")
     return parser.parse_args()
 
+relation_name_mappings = {
+    "att_lithology" : "has lithology of",
+    "att_sed_structure" : "has sedimentary structure",
+}
 def save_kg(kg, save_path):
     net = Network(directed=True, width="auto", height="700px", bgcolor="#eeeeee")
 
@@ -119,6 +123,8 @@ def save_kg(kg, save_path):
         src_articles = ",".join(src_articles)
 
         # Add in the edge
+        if r_type in relation_name_mappings:
+            r_type = relation_name_mappings[r_type]
         net.add_edge(head, tail, title = src_articles, label = r_type)
 
         # Add in the rows to the csv file
@@ -126,6 +132,7 @@ def save_kg(kg, save_path):
             for sentence in sources[article_id]:
                 df_rows.append([head, r_type, tail, article_id, sentence])
     
+    print("Creating graph with", len(kg.entities), "entities and", len(df_rows), "relationships")
     # Save the file
     net.repulsion(
         node_distance=200,
