@@ -50,13 +50,40 @@ def generate_sequence_dataset(src_file, dst_folder):
         save_file_name = os.path.basename(src_file).replace(".txt", ".tsv")
         merged_df.to_csv(os.path.join(dst_folder, save_file_name), sep='\t', index=False, header=False)
 
-def main():
-    args = read_args()
+def unique_ent_and_rel():
+    df = pd.read_csv("/ssd/dsarda/unsupervised-kg/macrostrat_db/macrostrat_graph.csv")
+    r_types = list(df["edge_name"].unique())
 
+    unique_entities = set()
+    r_tokens = []
+    for curr_r in r_types:
+        if "_to_" in curr_r:
+            src_type, dst_type = curr_r.split("_to_")
+            unique_entities.add(src_type)
+            unique_entities.add(dst_type)
+        else:
+            unique_entities.add("lith")
+            unique_entities.add("lith_att")
+        
+        r_tokens.append("@" + str(curr_r) + "@")
+    
+    unique_arr = list(unique_entities)
+    ent_tokens = []
+    for unique_val in unique_arr:
+        ent_tokens.append("@" + str(unique_val) + "@")
+
+    print(ent_tokens)
+    print(r_tokens)
+
+def main():
+    '''
+    args = read_args()
     src_dir, save_dir = args.load_directory, args.save_directory
     generate_sequence_dataset(os.path.join(src_dir, "train.txt"), save_dir)
     generate_sequence_dataset(os.path.join(src_dir, "valid.txt"), save_dir)
     generate_sequence_dataset(os.path.join(src_dir, "test.txt"), save_dir)
+    '''
+    unique_ent_and_rel()
 
 if __name__ == "__main__":
     main()

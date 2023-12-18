@@ -1,5 +1,14 @@
 # unsuperved-kg
 
+## Installing the dependencies
+
+To prevent any issues we recommend running this in an anaconda environment with python=3.8 and running the following commands: 
+```
+$ conda install -c conda-forge jsonnet
+$ pip install -r requirements.txt
+$ export TOKENIZERS_PARALLELISM=true
+```
+
 ## Macrostrat DB explorer
 
 The `macrostrat_db/database_explorer.ipynb` contains code to explore the database dump of the macrostrat datbase. It produces two files, a `all_columns.csv` which contains metadata
@@ -26,20 +35,22 @@ JOIN lith_atts la
 To extract relationships from the text corpus, we utilize the REBEL model: [https://github.com/Babelscape/rebel](https://github.com/Babelscape/rebel) which is a seq2sel model for relationship extraction.
 In the `rebel_kg` directory, you can use the `kg_runner.py` to generate a knowledge graph for a text corpus. Running `python kg_runner.py --help` you can see the arguments to pass to generate the kg:
 ```
-usage: kg_runner.py [-h] [--directory DIRECTORY] [--file FILE] [--processes PROCESSES] [--num_files NUM_FILES] --save SAVE [--model_path MODEL_PATH]
+usage: kg_runner.py [-h] [--directory DIRECTORY] [--file FILE] [--processes PROCESSES] [--num_files NUM_FILES] --save SAVE [--model_type MODEL_TYPE] [--model_path MODEL_PATH]
 
 optional arguments:
   -h, --help            show this help message and exit
-  --directory DIRECTORY
+  --directory DIRECTORY 
                         The directory containing the text corpus we want to process (default: )
   --file FILE           The file we want to generate the kg for (default: )
-  --processes PROCESSES
+  --processes PROCESSES 
                         Number of process we want running (default: 1)
-  --num_files NUM_FILES
+  --num_files NUM_FILES 
                         Number of files in the directory we want to save (default: -1)
   --save SAVE           The html file we want to save the network in (default: None)
+  --model_type MODEL_TYPE
+                        The type of model we want to use (default: rebel)
   --model_path MODEL_PATH
-                        The model we want to use for generating kg (default: Babelscape/rebel-large)
+                        The path to the model weights we want to use (default: Babelscape/rebel-large)
 ```
 
 Alongside saving the html file, it will also save a csv file representing the knowledge graph in the same directory as the html. An example of running the command for a directory: 
@@ -53,7 +64,7 @@ Similarily, to run for the provided example file, you can use the command:
 $ python kg_runner.py --file example.txt --save example.html
 ```
 
-The example file contains the sentence, "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions." which results in a Knowledge Graph in the html file of:
+Running this script for the sentence "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions" produces the knowledge graph:
 
 ![Example Knowledge Graph](images/example_kg.jpg)
 
@@ -96,10 +107,20 @@ Thus, we try to finetune the REBEL model so that it recognizes these terms. The 
 We first generate a finetuning dataset using the Snippets API in `rebel_finetuning/dataset_creator.py` for the edges generated from running `macrostrat_db/database_explorer.ipynb`. We then finetune the dataset using `rebel_finetuning/src/finetune.py` and then convert it to a hugging face model using `rebel_finetuning/src/checkpoint_to_model.py`. To generate the kg using the finetuned model, pass the directory that the model is saved in to `kg_runner.py` using the `model_path` argument. 
 
 Running this for example text, "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions.", we get the output knowledge graph:
+
 ![Finetuned Example Graph](images/finetuned_kg.jpg)
 
 where the relationships type are custom defined relationships we have included in our training set. 
 
 ## Seq2Rel Training
 
-We noticed that even after finetuning that some of the uncommon terms were not being recognized so that we decided to use, [seqrel](https://github.com/JohnGiorgi/seq2rel) which allows us to do entity hinting and specify the term that we care about. We first reformatted the rebel dataset using the `seq_to_rel/create_dataset.py` and then trained the model using `seq_to_rel/training.py`. 
+We noticed that even after finetuning that some of the uncommon terms were not being recognized so that we decided to use, [seqrel](https://github.com/JohnGiorgi/seq2rel) which allows us to do entity hinting and specify the term that we care about. We first reformatted the rebel dataset using the `seq_to_rel/create_dataset.py` and then trained the model using `seq_to_rel/training.py`. This well save a `model.tar.gz` to an `output` directory and you can generate a knowledge graph using the command like this:
+```
+$ python kg_runner.py --file example.txt --save example.html --model_type seq2rel --model_path <path_to_model_zip>
+```
+
+where <path_to_model_zip> is the path to the `model.tar.gz` file. Using this on the example setence, "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions.", gives us the knowledge graph:
+
+![Seq2rel Relationship Graph](images/seq2rel_kg.jpg)
+
+## Comparing the two models

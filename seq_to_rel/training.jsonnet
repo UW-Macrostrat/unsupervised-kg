@@ -1,27 +1,27 @@
 // =================== Configurable Settings ======================
 
-// The pretrained model to use as encoder. This is a reasonable default for biomedical text.
+// The pretrained model to use as encoder.
 // Should be a registered name in the Transformers library (see https://huggingface.co/models) 
 // OR a path on disk to a serialized transformer model.
-local model_name = "microsoft/BiomedNLP-BiomedBERT-base-uncased-abstract-fulltext";
+local model_name = "bert-base-uncased";
 
 // These are reasonable defaults.
 local max_length = 512;       // Max length of input text
-local max_steps = 96;         // Max number of decoding steps
+local max_steps = 400;        // Max number of decoding steps
 
-local num_epochs = 30;        // Number of training epochs
+local num_epochs = 50;        // Number of training epochs
 local batch_size = 4;         // Per-GPU batch size
 local grad_acc_steps = 1;     // Number of training steps before backpropagating gradients
-local decoder_lr = 5e-4;      // Learning rate for decoder params
+local decoder_lr = 7.8e-5;    // Learning rate for decoder params
 
 local encoder_lr = 2e-5;      // Learning rate for encoder params
-local encoder_wd = 0.01;      // Weight decay for encoder params
+local encoder_wd = 0.01;      // Weight  decay for encoder params
 local reinit_layers = 1;      // Re-initializes the last N layers of the encoder
 local dropout = 0.10;         // Dropout applied to decoder inputs and cross-attention weights
 local weight_dropout = 0.50;  // Weight dropout applied to hidden-to-hidden decoder weights
 
-local beam_size = 4;          // Beam size to use during decoding (test time only)
-local length_penalty = 0.8;   // >1.0 favours longer decodings and <1.0 shorter (test time only)
+local beam_size = 8;          // Beam size to use during decoding (test time only)
+local length_penalty = 1.4;   // >1.0 favours longer decodings and <1.0 shorter (test time only)
 
 // Number of GPUs to use. 0 means CPU only, 1 means one GPU, etc.
 local num_gpus = 1;
@@ -33,11 +33,23 @@ local use_amp = true;
 
 // Lists containing the special entity/relation tokens in your target vocabulary
 local ent_tokens = [
-    "@GENE@",
-    "@DISEASE@",
+    "@lith_att@", 
+    "@strat_name@", 
+    "@lith_type@", 
+    "@lith_group@", 
+    "@lith@",
 ];
+
 local rel_tokens = [
-    "@GDA@",
+    "@strat_name_to_lith@", 
+    "@lith_to_lith_group@", 
+    "@lith_to_lith_type@", 
+    "@att_grains@", 
+    "@att_lithology@", 
+    "@att_color@", 
+    "@att_sed_structure@", 
+    "@att_bedform@", 
+    "@att_structure@",
 ];
 
 // These are provided as external variables
@@ -137,6 +149,9 @@ local TARGET_TOKENIZER = {
                 "type": "f1_seq2rel",
                 "labels": rel_labels,
                 "average": "micro",
+                // DocRED has distinct head or tail entities, so this must be set to True to take
+                // that into account during evaluation.
+                "ordered_ents": true,
                 "remove_duplicate_ents": true,
             },
         ],

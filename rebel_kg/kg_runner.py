@@ -1,4 +1,3 @@
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import math
 import torch
 from pyvis.network import Network
@@ -6,12 +5,13 @@ import os
 import random
 import numpy
 from knowledge_graph import *
+from model_wrapper import *
 import multiprocessing
 import argparse
 import numpy as np
 import pandas as pd
 
-def run_for_file(model, tokenizer, file_path):
+def run_for_file(model, file_path):
     combined_kg = KG()
     with open(file_path, 'r') as reader:
         all_lines = reader.readlines()
@@ -28,19 +28,26 @@ def run_for_file(model, tokenizer, file_path):
             continue
 
         # Add kg for this line
-        line_kg = get_kg_for_line(model, tokenizer, curr_line, article_id)
+        line_kg = get_kg_for_line(model, curr_line, article_id)
         combined_kg.merge_with_kb(line_kg)
             
     return combined_kg
 
+def get_model(model_type, model_path):
+    if model_type == "rebel":
+        return RebelWrapper(model_path)
+    elif model_type == "seq2rel":
+        return Seq2RelWrapper(model_path)
+    else:
+        raise Exception("Invalid model type of " + model_type)
+
 # This is run by each process concurrently
-def run_for_multiple_files(all_files, share_queue, model_path):
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
+def run_for_multiple_files(all_files, share_queue, model_type, model_path):
+    model = get_model(model_type, model_path)
 
     merged_kg = KG()
     for curr_file in all_files:
-        file_kg = run_for_file(model, tokenizer, curr_file)
+        file_kg = run_for_file(model, curr_file)
         merged_kg.merge_with_kb(file_kg)
     
     if share_queue is None:
@@ -48,7 +55,7 @@ def run_for_multiple_files(all_files, share_queue, model_path):
 
     share_queue.put(merged_kg)
 
-def run_for_directory(dir_path, num_process, num_files, model_path):
+def run_for_directory(dir_path, num_process, num_files, model_type, model_path):
     # Get the files we want to process
     all_dir_files = []
     for file_name in os.listdir(dir_path):
@@ -74,7 +81,7 @@ def run_for_directory(dir_path, num_process, num_files, model_path):
     for idx, process_files in enumerate(files_per_process):
         process_files = list(process_files)
         print("Process", idx, "is processing", len(process_files), "files")
-        curr_process = multiprocessing.Process(target = run_for_multiple_files, args = (process_files, share_queue, model_path, ))
+        curr_process = multiprocessing.Process(target = run_for_multiple_files, args = (process_files, share_queue, model_type, model_path, ))
         curr_process.start()
         running_processes.append(curr_process)
     
@@ -99,7 +106,8 @@ def read_args():
     parser.add_argument('--processes', type = int, default = 1, help = "Number of process we want running")
     parser.add_argument('--num_files', type = int, default = -1, help = "Number of files in the directory we want to save")
     parser.add_argument('--save', type = str, required = True, help = "The html file we want to save the network in")
-    parser.add_argument('--model_path', type = str, default = "Babelscape/rebel-large", help = "The model we want to use for generating kg")
+    parser.add_argument('--model_type', type = str, default = "rebel", help = "The type of model we want to use")
+    parser.add_argument('--model_path', type = str, default = "Babelscape/rebel-large", help = "The path to the model weights we want to use")
     return parser.parse_args()
 
 relation_name_mappings = {
@@ -157,9 +165,9 @@ def main():
         raise argparse.ArgumentTypeError('Either a file or directory must be specified')
 
     if len(args.directory) > 0:
-        result_kg = run_for_directory(args.directory, args.processes, args.files, args.model_path)
+        result_kg = run_for_directory(args.directory, args.processes, args.files, args.model_type, args.model_path)
     else:
-        result_kg = run_for_multiple_files([args.file], None, args.model_path)
+        result_kg = run_for_multiple_files([args.file], None, args.model_type, args.model_path)
 
     save_kg(result_kg, args.save)
 
