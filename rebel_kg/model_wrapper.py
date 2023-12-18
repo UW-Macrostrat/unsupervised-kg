@@ -17,6 +17,7 @@ class RebelWrapper:
     def __init__(self, model_path):
         self.model_path = model_path
         self.span_length = 128
+
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
     

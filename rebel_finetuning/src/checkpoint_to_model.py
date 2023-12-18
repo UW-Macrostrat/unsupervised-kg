@@ -57,6 +57,7 @@ def train(conf: omegaconf.DictConfig) -> None:
     if conf.dataset_name.split('/')[-1] == 'docred_typed.py':
         tokenizer.add_tokens(['<loc>', '<misc>', '<per>', '<num>', '<time>', '<org>'], special_tokens = True)
     if conf.dataset_name.split('/')[-1] == 'archive.py':
+        print("Loading archive tokens")
         archive_terms = read_archive_tokens(conf.token_terms)
         tokenizer.add_tokens(archive_terms, special_tokens = True)
 
@@ -68,12 +69,13 @@ def train(conf: omegaconf.DictConfig) -> None:
 
     model.resize_token_embeddings(len(tokenizer))
     print("Resized model for", len(tokenizer), "tokens")
+
     pl_data_module = BasePLDataModule(conf, tokenizer, model)
     pl_module = BasePLModule(conf, config, tokenizer, model)
 
     model = pl_module.load_from_checkpoint(checkpoint_path = conf.checkpoint_path, config = config, tokenizer = tokenizer, model = model)
-    model.model.save_pretrained('../model/archive_tuned')
-    model.tokenizer.save_pretrained('../model/archive_tuned')
+    model.model.save_pretrained(conf.model_save_path)
+    model.tokenizer.save_pretrained(conf.model_save_path)
 
 @hydra.main(config_path='../conf', config_name='root')
 def main(conf: omegaconf.DictConfig):

@@ -173,6 +173,9 @@ rebel_finetuning/src/outputs
 rebel_finetuning/model
 seq_to_rel/data
 seq_to_rel/output
+rebel_kg/samples
+rebel_kg/lib
+rebel_finetuning/src/results
 
 # General
 .DS_Store

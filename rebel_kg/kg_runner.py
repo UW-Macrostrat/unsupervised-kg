@@ -21,7 +21,6 @@ def run_for_file(model, file_path):
     article_id = article_id[ : article_id.rindex(".")]
 
     # Get the kg for all lines and use it to generate combined kg
-    print("Generating kg for file", article_id, "with", len(all_lines), "lines")
     for line in all_lines:
         curr_line = line.strip()
         if len(curr_line) == 0:
@@ -113,6 +112,13 @@ def read_args():
 relation_name_mappings = {
     "att_lithology" : "has lithology of",
     "att_sed_structure" : "has sedimentary structure",
+    "strat_name_to_lith" : "strat has lithology",
+    "lith_to_lith_group" : "lithology is part of group",
+    "lith_to_lith_type" : "lithology has type of",
+    "att_grains" : "has grains of",
+    "att_color" : "has color of",
+    "att_bedform" : "has bedform of",
+    "att_structure" : "has structure of",
 }
 def save_kg(kg, save_path):
     net = Network(directed=True, width="auto", height="700px", bgcolor="#eeeeee")
@@ -151,6 +157,7 @@ def save_kg(kg, save_path):
     )
     net.set_edge_smooth('dynamic')
     net.show(save_path, notebook=False) 
+    net.barnes_hut()
 
     # Save the kg as a csv
     csv_save_path = save_path[ : save_path.rindex(".")] + ".csv"
