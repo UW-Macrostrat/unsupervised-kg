@@ -122,5 +122,3 @@ $ python kg_runner.py --file example.txt --save example.html --model_type seq2re
 where <path_to_model_zip> is the path to the `model.tar.gz` file. Using this on the example setence, "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions.", gives us the knowledge graph:
 
 ![Seq2rel Relationship Graph](images/seq2rel_kg.jpg)
-
-## Comparing the two models
