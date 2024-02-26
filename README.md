@@ -1,4 +1,13 @@
-# unsuperved-kg
+# unsupervised-kg
+
+Here is the current status of the following work:
+- Utilize a entity hinting based relationships based extraction to get predefined relationships for entities in the macrostrat database
+- Also finetuned the rebel model to perform triplet extraction which doesn’t need predefined relationships
+- Created script to link the relationships back to the macrostrat database and write the triplets to predefined schema
+
+In terms of future work, we plan to:
+- Create an initial dataset of paragraph level relationships we want to be able to be extract as well define benchmark metrics out of that
+- Look into performance of existing models on paragraph level relationships
 
 ## Installing the dependencies
 
