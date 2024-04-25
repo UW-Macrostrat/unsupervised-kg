@@ -11,11 +11,14 @@ In terms of future work, we plan to:
 
 ## Installing the dependencies
 
-To prevent any issues we recommend running this in an anaconda environment with python=3.8 and running the following commands: 
+We have provided a Dockerfile that you can use to setup the environment by running the following commands:  
 ```
-$ conda install -c conda-forge jsonnet
-$ pip install -r requirements.txt
-$ export TOKENIZERS_PARALLELISM=true
+$ docker build -t unsupervised_kg docker/.
+$ docker rm unsupervised_kg
+$ CURRENT_DIR=`pwd` && docker run --gpus all -d -v $CURRENT_DIR:/working_dir/ --name=unsupervised_kg unsupervised_kg:latest sleep infinity
+$ docker exec -it unsupervised_kg bash
+$ conda env create -f environment.yml
+$ conda activate unsupervised_kg
 ```
 
 ## Macrostrat DB explorer
