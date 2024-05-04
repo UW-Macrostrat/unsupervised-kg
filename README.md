@@ -1,46 +1,54 @@
 # unsupervised-kg
 
-Here is the current status of the following work:
-- Utilize a entity hinting based relationships based extraction to get predefined relationships for entities in the macrostrat database
-- Also finetuned the rebel model to perform triplet extraction which doesn’t need predefined relationships
-- Created script to link the relationships back to the macrostrat database and write the triplets to predefined schema
+We explored three different techniques to extract relationships from paragraphs:
+- REBEL: We finetuned a pretrained relationship extraction model on our custom dataset
+- Seq2rel: It is another relationship extraction model but it supports entity hinting that allows us to indicate what entities we care about
+- SpanBERT: This technique seperates entity recognition from relationship extraction. In this approach we utilize a custom technique to determine 
+entities we care about and then use a finetuned SpanBERT to predict the relationship between spans in a text. 
 
-In terms of future work, we plan to:
-- Create an initial dataset of paragraph level relationships we want to be able to be extract as well define benchmark metrics out of that
-- Look into performance of existing models on paragraph level relationships
+This README has the following sections:
+- [Setting up the environment](#setting-up-the-environment): Describes how to setup the environment to run all of these models. 
+- [Using pretrained models](#using-the-pretrained-model): Describes how to utilize the pretrained models
+- [REBEL based knowledge graph extraction](#rebel-based-knowledge-graph-extraction) and [REBEL finetuning](#rebel-finetuning): Described how REBEL works and how we finetuned the model
+- [Seq2rel](#seq2rel-training): Describes how we finetuned the seq2rel model
+- [SpanBert](#spanbert-based-extraction): Describes how the SpanBERT extraction works and how we trained the model
 
-## Installing the dependencies
+## Setting up the environment
 
 We have provided a Dockerfile that you can use to setup the environment by running the following commands:  
 ```
-$ docker build -t unsupervised_kg docker/.
-$ docker rm unsupervised_kg
-$ CURRENT_DIR=`pwd` && docker run --gpus all -d -v $CURRENT_DIR:/working_dir/ --name=unsupervised_kg unsupervised_kg:latest sleep infinity
+$ export CURRENT_DIR=`pwd`
+$ cd docker
+$ docker build -t unsupervised_kg .
+$ docker run --gpus all -d -v $CURRENT_DIR:/working_dir/ --name=unsupervised_kg unsupervised_kg:latest sleep infinity
 $ docker exec -it unsupervised_kg bash
-$ conda env create -f environment.yml
 $ conda activate unsupervised_kg
 ```
 
-## Macrostrat DB explorer
+## Using the pretrained model
 
-The `macrostrat_db/database_explorer.ipynb` contains code to explore the database dump of the macrostrat datbase. It produces two files, a `all_columns.csv` which contains metadata
-about all the columns and tables in the `macrostrat` schema and `macrostrat_graph.csv` which contains data for a graph about units metadata extracted from the query:
+In the upcoming sections we are going to be talking about how we trained and finetuned the models mentioned above but we have uploaded the finetuned models to huggingface for easy access. You can use the following commands to use the finetuned versions of all of the models mentioned above: 
 
+For the finetuned REBEL model:
 ```
-SELECT *
-FROM units u
-JOIN unit_liths ul
-  ON u.id = ul.unit_id
-JOIN liths l
-  ON l.id = ul.lith_id
- -- Linking table between unit lithologies and their attributes
- -- (essentially, adjectives describing that component of the rock unit)
- -- Examples: silty mudstone, dolomitic sandstone, mottled shale, muscovite garnet granite
-JOIN unit_lith_atts ula
-  ON ula.unit_lith_id = ul.id
-JOIN lith_atts la
-  ON ula.lith_att_id = la.id
+$ cd combined_kg
+$ python kg_runner.py --file example.txt --save rebel_example.html --model_type rebel --model_path dsarda/rebel_macrostrat_finetuned
 ```
+which will generate a `rebel_example.html` that visualizes the extracted graph `rebel_example.csv` that stored the extracted relationship. 
+
+For the finetuned seq2rel model:
+```
+$ cd combined_kg
+$ python kg_runner.py --file example.txt --save seq2rel_example.html --model_type seq2rel --model_path dsarda/seq2rel_macrostrat_finetuned
+```
+which will similarily generate a `html` and `csv` file. 
+
+For the finetuned SpanBERT based model:
+```
+$ cd tree_extraction
+$ python tree_generator.py --model_dir dsarda/span_bert_finetuned_model --input_path tree_example.txt --save_path tree_example.json
+```
+which will save the results to the `tree_example.json` file. 
 
 ## REBEL based knowledge graph extraction
 
@@ -88,21 +96,6 @@ junior,subclass of,mining,example,"Jaguar is a Canadian-listed junior gold minin
 Jaguar,product or material produced,gold,example,"Jaguar is a Canadian-listed junior gold mining, development, and exploration company operating in Brazil with three gold mining complexes and a large land package covering approximately 20,000 ha."
 ```
 
-### Upload to Neo4j
-
-To upload to Neo4j, we need to have a txt containing the following information:
-```
-NEO4J_URI=<uri>
-NEO4J_USERNAME=<username>
-NEO4J_PASSWORD=<password>
-```
-This information is generally provided by Neo4j. In the example below, we assume that this information is stored in `neo4j_login.txt`.
-
-To upload the csv file produced by `kg_runner`, in this case `example.csv`, you can use the `neo4j_uploader` code as such:
-```
-$ python neo4j_uploader.py --login_file neo4j_login.txt --graph_file example.csv
-```
-
 ## REBEL Finetuning
 
 The problem is that REBEL model generally focuses on common terms and ignores terms that are more domain specific. For example, for the sentence:
@@ -134,3 +127,22 @@ $ python kg_runner.py --file example.txt --save example.html --model_type seq2re
 where <path_to_model_zip> is the path to the `model.tar.gz` file. Using this on the example setence, "The formation consists of massive and cross-bedded quartz sandstones with ferruginous concretions.", gives us the knowledge graph:
 
 ![Seq2rel Relationship Graph](images/seq2rel_kg.jpg)
+
+## SpanBERT based extraction
+
+We developed the following system to extract a relationship tree from a given piece of text:
+
+![Tree Extraction Graph](images/tree_extraction_flow.png)
+
+To generate the tree on the example text, run the following command in the `tree_extraction` directory:
+```
+$ python tree_generator.py --model_dir dsarda/span_bert_finetuned_model --input_path tree_example.txt --save_path tree_example.json
+```
+
+We trained the model using the command:
+```
+$ cd tree_extraction
+$ python run_macrostart.py --data_dir <datset_dir> --model spanbert-base-cased --do_train --do_eval --train_batch_size 32 --eval_batch_size 32 --learning_rate 2e-5 --num_train_epochs 30 --max_seq_length 512 --output_dir macrostrat_dir
+```
+
+where `<dataset_dir>` is a path to the finetuning dataset generated when finetuning REBEL. 

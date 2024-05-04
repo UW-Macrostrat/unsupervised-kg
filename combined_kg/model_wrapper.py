@@ -3,6 +3,8 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 import torch
 from seq2rel import Seq2Rel
 from seq2rel.common import util
+from huggingface_hub import Repository
+import os
 
 class ModelWrapper:
 
@@ -18,8 +20,11 @@ class RebelWrapper:
         self.model_path = model_path
         self.span_length = 128
 
+        print("Loading finetuned REBEL model from", self.model_path)
+        self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
-        self.model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
+        self.model = AutoModelForSeq2SeqLM.from_pretrained(model_path).to(self.device)
+        print("Loaded REBEL model with device", self.device)
     
     def extract_relations_from_model_output(self, text):
         relations = []
@@ -63,6 +68,7 @@ class RebelWrapper:
             relations.append({
                 'head': subject.strip(),
                 'type': relation.strip(),
+                "model_used" : "rebel",
                 'tail': object_.strip()
             })
 
@@ -70,7 +76,7 @@ class RebelWrapper:
     
     def get_relations_in_line(self, line):
         # tokenize whole text
-        inputs = self.tokenizer([line], return_tensors="pt")
+        inputs = self.tokenizer([line], return_tensors="pt").to(self.device)
 
         # compute span boundaries
         num_tokens = len(inputs["input_ids"][0])
@@ -120,7 +126,20 @@ class Seq2RelWrapper:
 
     def __init__(self, model_path):
         self.model_path = model_path
-        self.model = Seq2Rel(model_path)
+        print("Loading finetuned Seq2rel model from", self.model_path)
+
+        # If the model doesn't exist then download it
+        if not os.path.exists(self.model_path):
+            save_dir = "seq2rel_macrostrat_finetuned"
+            if not os.path.exists(save_dir):
+                repo = Repository(local_dir = save_dir, clone_from = self.model_path)
+            self.model_path = os.path.join(save_dir, 'model.tar.gz')
+
+        cuda_device = -1
+        if torch.cuda.is_available():
+            cuda_device = 1
+        self.model = Seq2Rel(self.model_path, cuda_device = cuda_device)
+        print("Loaded finetuned Seq2rel model using cuda_device", cuda_device)
     
     def get_relations_in_line(self, line):
         output = self.model(line)
@@ -129,14 +148,25 @@ class Seq2RelWrapper:
         all_relations = []
         for curr_result in all_results:
             for relationship_type in curr_result:
+                # Read in the relationship
                 relationship_data = curr_result[relationship_type][0]
                 src_name, src_type = relationship_data[0]
                 dst_name, dst_type = relationship_data[1]
+                if len(src_name) == 0 or len(dst_name) == 0:
+                    continue
 
+                # Extract the node name
+                head_node = src_name[0].strip()
+                dst_node = dst_name[0].strip()
+                if "unknown" in head_node or "unknown" in dst_node:
+                    continue
+
+                # Record the relationship
                 all_relations.append({
-                    "head" : src_name[0].strip(),
+                    "head" : head_node,
                     "type" : relationship_type.strip(),
-                    "tail" : dst_name[0].strip()
+                    "model_used" : "seq2rel",
+                    "tail" : dst_node 
                 })
         
         return all_relations

@@ -175,6 +175,8 @@ seq_to_rel/output
 rebel_kg/samples
 rebel_kg/lib
 rebel_finetuning/src/results
+tree_extraction/example_results
+seq2rel_macrostrat_finetuned
 
 # General
 .DS_Store

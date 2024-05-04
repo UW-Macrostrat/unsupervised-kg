@@ -28,9 +28,10 @@ dependencies:
       - absl-py==2.0.0
       - aiohttp==3.9.1
       - aiosignal==1.3.1
-      - allennlp
+      - allennlp==2.9.3
       - allennlp-models==2.9.3
-      - altair==5.2.0
+      - altair
+      - annotated-types
       - antlr4-python3-runtime==4.8
       - arrow==1.3.0
       - astor==0.8.1
@@ -45,36 +46,41 @@ dependencies:
       - blis==0.7.11
       - boto3==1.34.2
       - botocore==1.34.2
-      - bravado==11.0.3
-      - bravado-core==6.1.0
-      - cached-path
-      - cachetools
+      - bravado
+      - bravado-core
+      - cached-path==1.1.2
+      - cachetools==5.3.3
       - catalogue==2.0.10
       - certifi==2023.11.17
       - cffi==1.16.0
       - charset-normalizer==3.3.2
-      - click
+      - click==8.1.7
+      - cloudpathlib
       - colorama==0.4.6
       - commonmark==0.9.1
+      - confection==0.1.4
       - configparser==6.0.0
       - conllu==4.4.1
       - contourpy==1.1.1
       - cryptography==42.0.1
       - cycler==0.12.1
       - cymem==2.0.8
-      - datasets
+      - datasets==2.10.1
       - decorator==5.1.1
       - dill==0.3.6
       - docker-pycreds==0.4.0
       - docopt==0.6.2
+      - https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.2.0/en_core_web_sm-3.2.0.tar.gz
       - exceptiongroup==1.2.0
       - executing==2.0.1
       - fairscale==0.4.6
-      - fastai
+      - fastai==2.7.15
       - fastcore==1.5.29
+      - fastcoref==2.1.6
       - fastdownload==0.0.7
       - fastprogress==1.0.3
       - filelock==3.6.0
+      - flask==3.0.3
       - fonttools==4.46.0
       - fqdn==1.5.1
       - frozenlist==1.4.0
@@ -102,7 +108,7 @@ dependencies:
       - importlib-resources==6.1.1
       - iniconfig==2.0.0
       - install==1.3.5
-      - ipython==8.12.3
+      - ipython
       - isoduration==20.11.0
       - itsdangerous==2.1.2
       - jedi==0.19.1
@@ -131,7 +137,7 @@ dependencies:
       - neo4j==5.15.0
       - neptune-client
       - networkx==3.1
-      - nltk
+      - nltk==3.8.1
       - numpy==1.24.4
       - nvidia-cublas-cu12==12.1.3.1
       - nvidia-cuda-cupti-cu12==12.1.105
@@ -146,7 +152,7 @@ dependencies:
       - nvidia-nvjitlink-cu12==12.3.101
       - nvidia-nvtx-cu12==12.1.105
       - oauthlib==3.2.2
-      - omegaconf==2.0.6
+      - omegaconf
       - packaging==23.2
       - pandas==2.0.3
       - parso==0.8.3
@@ -172,7 +178,8 @@ dependencies:
       - pyasn1==0.5.1
       - pyasn1-modules==0.3.0
       - pycparser==2.21
-      - pydantic==1.8.2
+      - pydantic
+      - pydantic-core
       - pydeck==0.8.1b0
       - pygments==2.17.2
       - pyjwt==2.8.0
@@ -196,7 +203,7 @@ dependencies:
       - rsa==4.9
       - s3transfer==0.9.0
       - sacrebleu==1.5.0
-      - sacremoses
+      - sacremoses==0.1.1
       - safetensors==0.4.1
       - scikit-learn==1.3.2
       - scipy==1.10.1
@@ -209,15 +216,16 @@ dependencies:
       - six==1.16.0
       - smart-open==6.4.0
       - smmap==5.0.1
-      - spacy
-      - spacy-legacy
-      - spacy-loggers
+      - spacy==3.2.6
+      - spacy-legacy==3.0.12
+      - spacy-loggers==1.0.5
       - srsly==2.4.8
       - stack-data==0.6.3
-      - streamlit
+      - streamlit==1.34.0
       - subprocess32==3.5.4
       - swagger-spec-validator==3.0.3
       - sympy==1.12
+      - tenacity==8.2.3
       - tensorboard==2.14.0
       - tensorboard-data-server==0.7.2
       - tensorboardx==2.6.2.2
@@ -238,17 +246,18 @@ dependencies:
       - triton==2.1.0
       - typer==0.4.2
       - types-python-dateutil==2.8.19.14
-      - typing-extensions==4.5.0
+      - typing-extensions
       - tzdata==2023.3
       - tzlocal==5.2
       - uri-template==1.3.0
       - urllib3==1.26.18
-      - validators
+      - validators==0.20.0
       - wandb==0.10.26
       - wasabi==0.10.1
       - watchdog==3.0.0
       - wcwidth==0.2.12
-      - weaviate-client
+      - weasel==0.3.4
+      - weaviate-client==3.23.2
       - webcolors==1.13
       - websocket-client==1.7.0
       - werkzeug==3.0.1
