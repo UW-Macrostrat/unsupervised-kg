@@ -206,3 +206,10 @@ Temporary Items
 .apdisk
 
 *.zip
+tree_extraction/server_input_examples
+tree_extraction/all_sources
+tree_extraction/feedback_trained_weights
+tree_extraction/map_legend_examples
+tree_extraction/server_input_examples
+tree_extraction/spanbert_macrostrat_finetuned
+tree_extraction/weaviate_example_requests

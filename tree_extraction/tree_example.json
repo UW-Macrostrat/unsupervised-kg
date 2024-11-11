@@ -1,7 +1,7 @@
 {
-    "run": "run_2024-05-04_02:11:42.335930",
+    "run_id": "run_2024-05-04_02:11:42.335930",
     "extraction_pipeline_id": "0",
-    "model_id": "tree_based_span_bert_0",
+    "model_id": "tree_based_span_bert_1",
     "results": [
         {
             "text": "the mount galen volcanics consists of basalt, andesite, dacite, and rhyolite lavas and dacite and rhyolite tuff and tuff breccia. The Hayhook formation was named, mapped and discussed by lasky and webber 1949. the formation ranges up to at least 2500 feet in thickness.",
@@ -55,7 +55,7 @@
             "just_entities": [
                 {
                     "entity": "The Hayhook formation",
-                    "entity_type": "strat_name"
+                    "entity_type": "strat_names"
                 }
             ]
         }

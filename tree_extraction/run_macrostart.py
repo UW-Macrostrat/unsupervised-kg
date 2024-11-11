@@ -12,12 +12,11 @@ import spacy
 import time
 import json
 import pandas as pd
-
+import traceback
 import numpy as np
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from collections import Counter
-
 from torch.nn import CrossEntropyLoss
 
 from pytorch_pretrained_bert.file_utils import PYTORCH_PRETRAINED_BERT_CACHE, WEIGHTS_NAME, CONFIG_NAME
@@ -83,7 +82,7 @@ def get_span(txt_tokens, search_txt):
     
     return None
 
-valid_labels = ["att_bedform", "att_color", "att_grains", "att_lithology", "att_sed_structure", "att_structure", "no_relation", "strat_name_to_lith"]
+valid_labels = ["lith_to_attribute", "strat_to_lith", "lith_to_lith_type", "strat_name_to_lith", "lith_to_lith_att"]
 class DataProcessor(object):
     """Processor for the custom data set."""
 
@@ -150,15 +149,15 @@ class DataProcessor(object):
             # Generate examples from the curent df
             file_id = file_name[ : file_name.index(".")]
             file_path = os.path.join(data_dir, file_name)
-            curr_df = pd.read_csv(file_path)
-            log_rate = int(len(curr_df.index)/20)
+            curr_df = pd.read_csv(file_path, sep = '\t')
+            log_rate = max(int(len(curr_df.index)/20), 10)
             for idx, row in curr_df.iterrows():
                 relationship_type = row["type"]
                 if relationship_type not in valid_labels:
                     continue
 
                 # Get the labels
-                example_id = row["doc_id"] + str(file_id) + str(idx)
+                example_id = str(row["doc_id"]) + str(file_id) + str(idx)
                 if relationship_type.startswith("att"):
                     src_type, dst_type = "lith", "lith_att"
                 else:
@@ -601,7 +600,7 @@ def main(args):
                     f.write("%s = %s\n" % (key, str(result[key])))
     
     except Exception as e: 
-        print("Got exception of", e)
+       print("Got exception of", traceback.format_exc())
 
     # Write the label to id mapping
     data_to_write = {"label2id" : label2id, "id2label" : id2label}

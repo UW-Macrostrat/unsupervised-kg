@@ -3,6 +3,7 @@ from ner_extractor import *
 from re_extractor import *
 from huggingface_hub import Repository
 import datetime
+import requests
 
 class TreeGenerator:
 
@@ -66,7 +67,7 @@ class TreeGenerator:
         elif entity.term_type.startswith("lith"):
             relationship_type = "att_of_lith"
         else:
-            raise Exception("No relationship type for entity type", entity.term_type)
+            return
 
         for _, child in entity.children:
             # Record this relationship
@@ -88,7 +89,7 @@ class TreeGenerator:
         
     def run_for_text(self, text):
         # Get the rock terms
-        sentence, sentence_words, rock_terms, sentence_spans, word_ranges = self.ner_extractor.extract_terms(text)
+        sentence, sentence_words, rock_terms, sentence_spans, word_ranges = self.ner_extractor.extract_terms(text["paragraph_text"])
         self.coref_resolver.record_cooref_occurences(sentence_words, word_ranges, rock_terms)
 
         # Get rocks by level
@@ -114,10 +115,12 @@ class TreeGenerator:
         
         if highest_exist < len(self.start_prefixes):
             entities_arr = [entity for entity in rocks_by_level[highest_exist]]
-
+        
+        text["paragraph_text"] = sentence
+        text["text_type"] = "weaviate_text"
         relationships, just_entities = self.format_result(sentence, entities_arr)
         return {
-            "text" : sentence,
+            "text" : text,
             "relationships" : relationships,
             "just_entities" : just_entities
         }
@@ -125,13 +128,14 @@ class TreeGenerator:
 def read_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_dir", type=str, required=True, help = "The directory containing the model")
-    parser.add_argument("--input_path", type=str, required=True, help = "The path to the file we want to process")
-    parser.add_argument("--save_path", type=str, required=True, help = "The path to the json where we want to save the result")
+    parser.add_argument("--input_dir", type=str, required=True, help = "The path to the directory we want to process")
+    parser.add_argument("--save_dir", type=str, required=True, help = "The path to the directory we want to save the result to")
     return parser.parse_args()
 
 def main():
     # Load the model
     args = read_args()
+    os.makedirs(args.save_dir, exist_ok = True)
 
     # If the model doesn't exist download it from huggingface
     if not os.path.exists(args.model_dir):
@@ -143,20 +147,26 @@ def main():
     tree_generator = TreeGenerator(args.model_dir)
         
     # Load the text
-    with open(args.input_path, 'r') as reader:
-        input_text = reader.read().strip()
-        
-    # Save the result
-    run_id = "run_" + str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S.%f"))
-    json_to_save = {
-        "run" : run_id,
-        "extraction_pipeline_id" : "0",
-        "model_id" : "tree_based_span_bert_0",
-        "results" : [tree_generator.run_for_text(input_text)]
-    }
+    for file_name in os.listdir(args.input_dir):
+        input_path = os.path.join(args.input_dir, file_name)
+        with open(input_path, 'r') as reader:
+            input_text = json.load(reader)
+            
+        # Save the result
+        run_id = "run_" + str(abs(hash(file_name))) + "_" + str(datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S.%f"))
+        json_to_save = {
+            "run_id" : run_id,
+            "model_name" : "tree_based_span_bert",
+            "model_version" : "0",
+            "extraction_pipeline_id": "0",
+            "results" : [tree_generator.run_for_text(input_text)]
+        }
 
-    with open(args.save_path, "w+") as writer:
-        json.dump(json_to_save, writer, indent = 4)
+        # Save the result to the save dir
+        save_path = os.path.join(args.save_dir, file_name)
+        with open(save_path, 'w+') as writer:
+            json.dump(json_to_save, writer, indent=4)
+        print("Saved result to", save_path)
 
 if __name__ == "__main__":
     main()

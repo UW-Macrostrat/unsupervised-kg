@@ -44,7 +44,7 @@ def save_rows_as_df(file_id, results_row):
     save_path = f"data/archive/{file_id}.csv"
     save_df = pd.DataFrame(results_row, columns = ["doc_id", "title", "text", "src", "dst", "type"])
     print("Saving file", save_path, "with", len(save_df.index), "rows")
-    save_df.to_csv(save_path, index = None)
+    save_df.to_csv(save_path, index = None, sep = '\t')
 
 def create_dataset_using_snippets(graph_path, num_workers = 5, pairs_per_file = 1000):
     if os.path.exists("data/archive/0.csv"):

@@ -1,0 +1,316 @@
+[
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620ed928ad0e9c819b0f36ae",
+                    "hashed_text": "7a8bcae48575eb21b76ed5073201be8788b23c5a87c4f73d6c35c7c44ae2f687",
+                    "weaviate_id": "000050bd-ea19-4272-ac0d-57f6c12b0ec1",
+                    "paragraph_text": "Dikes of basaltic andesite locally intrude all members of the Bonita Canyon Formation and the Underdown Tuff, but are not observed intruding the Toiyabe Quartz Latite. Bonham (1970) has suggested either a Miocene or Pliocene age for these rocks.\nNorth-south and east-west cross sections of the Vernal Project are presented as Figure 7-2. The cross sections were prepared by Ilchik (1982) and the section lines (A-A and B-B) are shown on Figure 7-1.\nThe Toiyabe Quartz Latite is juxtaposed against the rhyolite lava (unit Trl) in the extreme southern part of the map area. This is interpreted as an extension of an alluvium concealed Basin and Range type rangefront fault. Stratigraphic throw on this fault is estimated to be in excess of 1400 feet, based on offsets in the Toiyabe Quartz Latite (Bonham, 1970)."
+                },
+                "relationships": [
+                    {
+                        "src": "basaltic andesite",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "Bonita Canyon Formation and Underdown Tuff",
+                        "reasoning": "The text states that dikes of basaltic andesite intrude all members of the Bonita Canyon Formation and the Underdown Tuff, indicating that the lithology (basaltic andesite) is present within the stratigraphic units (Bonita Canyon Formation and Underdown Tuff)."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620d913bad0e9c819b08e421",
+                    "hashed_text": "6c9e281301d8e139a91bf40ae2457b58b1c9156036e54846a642a6a43523ccc3",
+                    "weaviate_id": "00001aef-8619-4abc-93c8-bed94f61ff10",
+                    "paragraph_text": "Figure 9.2.1  Geology of the Central Catherine, Link-Catherine Property, and 80 Foot Fall Claimblocks. Boston-Skead Gold Belt, Larder Lake Mining Division, Ontario (Modified After Ayer and Trowell, 2000).\nThe Link-Catherine Claims and near-by properties such as the Central Catherine and 80-Foot Falls Claims have historically been explored primarily for their potential to yield major vein-type gold deposits. This has been based upon the numerous auriferous quartz-carbonate veins intersected by past drilling and trenching. By-product levels of silver (Ag) and tellurium (Te) may also be associated with the gold mineralization but this has not yet been documented. There is also permissive and/or documented potential for at least four other types of mineralization; these include major and/or byproduct levels of Te, Cu, Li, Mo, and possibly Rare Earth Elements (REE). All five of the potential deposit types for which the Link-Catherine Property area is prospective are listed below."
+                },
+                "relationships": [
+                    {
+                        "src": "quartz-carbonate",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "auriferous",
+                        "reasoning": "The text mentions 'auriferous quartz-carbonate veins', which associates a mineralization type (gold) with a lithology (quartz-carbonate)."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620d2308ad0e9c819b0629c9",
+                    "hashed_text": "991a65a923f3a11481d9f7bc561c1dd2e32829a823b88d371fcc3814cbf8b9d9",
+                    "weaviate_id": "0000e596-8fbe-452d-9220-762b4745544e",
+                    "paragraph_text": "The weathered/non-weathered interface is an irregular surface ranging from 30 to 50 meters below ground level. This was defined by logging the point in each drill hole below which all the sulphides are fresh and above which most of the sulphides have been converted to rusty limonite. In most holes this is seen as a very sharp, well-defined line.\nThe sulphides (Py) above the interface have been mostly converted to oxides. In the SW zone, the oxidation process has been more limited, compared to the NE zones. In few holes scattered sulphides remain within the oxide section. These sections are generally short and irregular with little continuity."
+                },
+                "relationships": [
+                    {
+                        "src": "sulphides",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "limonite",
+                        "reasoning": "The text describes the sulphides as 'fresh' below the interface and 'mostly converted to rusty limonite' above, indicating a change in the lithology."
+                    },
+                    {
+                        "src": "sulphides",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "oxides",
+                        "reasoning": "The text mentions the sulphides being 'mostly converted to oxides' above the interface, indicating a change in the lithology."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620e8f8fad0e9c819b0d6793",
+                    "hashed_text": "dab34044cf9e7a220cedffa58125e83dbbdf3ea19e6bb8a010e0ae454ce2489c",
+                    "weaviate_id": "0000bd92-ad4f-42ee-ac9b-70754158a470",
+                    "paragraph_text": "Rocks in the Baie du Nord area are affected by the Brien high-strain system. The Brien high-strain system is characterized by west-northwest trending subvertical shear zones showing evidence of sinistral movement (Indares et al., 2000). These rocks are also affected by the development of tight to isoclinal folds with axes plunging gently to the east-southeast and west-northwest trending axial planes.\nAccording to Indares et al. (2000), rocks of the Boundary Zone are affected by a retrograde metamorphism to the greenschist facies with presence of chlorite and epidote near the Hart Jaune shear zone. High pressure metamorphic assemblages to the eclogite facies are preserved in mafic tectonic lenses, metapelites, anorthosites and gabbros."
+                },
+                "relationships": [
+                    {
+                        "src": "greenschist facies",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "chlorite and epidote",
+                        "reasoning": "The text mentions the presence of chlorite and epidote, which are minerals that can be associated with a specific lithology or facies (greenschist facies)."
+                    },
+                    {
+                        "src": "eclogite facies",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "mafic tectonic lenses, metapelites, anorthosites, and gabbros",
+                        "reasoning": "The text describes the presence of high-pressure metamorphic assemblages in certain rocks, which can be associated with a specific lithology or facies (eclogite facies)."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620c0c20ad0e9c819b02062e",
+                    "hashed_text": "300c62705cbb9f4d56d12dc76abe7b8f40a3c7c81d1ad868c86993b000d39d46",
+                    "weaviate_id": "000156f9-9668-4553-b2e4-3b6d9b9cff77",
+                    "paragraph_text": "All core was split and approximately half of the material was bagged at mostly 1 metre intervals and sent to SGS Labs in Accra.\nDiamond drilling intersected dominantly Birimian metasediments in sequences of greywacke, siltstone and mudstones (turbidites). Locally, granite dykes and lenses were intersected. The granite is coarse-grained and porphyritic. Quartz veining tends to increase in intensity in an immediately around the granite due to its more competent nature.\nGold mineralization in generally localized with quartz veining and sulphides with high-grade mineralization typically localized in and around the narrow granodiorite dykes and lenses. The dominant sulphides reported from drilling were pyrite with variable and more local arsenopyrite. The arsenopyrite is generally very finely disseminated. Several occurrences of visible gold in quartz veins are noted on the drill logs (MO95-5 at 28.5 metres, MO95-6 at 37.2 metres and 50.0 metres)."
+                },
+                "relationships": [
+                    {
+                        "src": "Birimian",
+                        "relationship_type": "strat_name_to_lith",
+                        "dst": "greywacke, siltstone, and mudstones",
+                        "reasoning": "The text describes the presence of 'greywacke, siltstone and mudstones' as a sequence of metasediments, indicating a relationship between the stratigraphic unit (Birimian) and the lithology (greywacke, siltstone, and mudstones)."
+                    },
+                    {
+                        "src": "granite",
+                        "relationship_type": "att_grains",
+                        "dst": "coarse-grained and porphyritic",
+                        "reasoning": "The text describes the granite as 'coarse-grained and porphyritic', indicating the grain size and texture of the lithology (granite)."
+                    },
+                    {
+                        "src": "quartz",
+                        "relationship_type": "att_bedform",
+                        "dst": "granite",
+                        "reasoning": "The text describes the quartz veining as 'tending to increase in intensity' around the granite, indicating a relationship between the lithology (quartz) and the presence of the granite"
+                    },
+                    {
+                        "src": "sulphides",
+                        "relationship_type": "att_bedform",
+                        "dst": "granodiorite",
+                        "reasoning": "The text describes the sulphides as 'high-grade' and localized in and around the granodiorite dykes and lenses, indicating a relationship between the lithology (sulphides) and the presence of the granodiorite"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620f3148ad0e9c819b109f54",
+                    "hashed_text": "53573a840706de5aa7398a1a5ea2341c27d02a2ea84386e2dfc91d05bfcab36f",
+                    "weaviate_id": "0001bde0-3766-4f77-a58f-0d42d0283f65",
+                    "paragraph_text": "Approximately 1.5 kilometres to the east, a second steeply-dipping, northwest trending fault marks the contact between Stuhini and Hazelton groups. Plugs of granodiorite to quartz monzonite, also of probable Jurassic age, intrude Stuhini volcanic rocks in the bottom of the valley immediately south of the GL2 Ridge target, and likewise in the valley bottom just north of GL2 Ridge, where it is in contact with a thick (>100 metres) limestone unit that dips shallowly to the west and contains high-grade Cu-Au-Ag skarn style mineralization (Figure 7.5). It was noted in conversation with A. Albano that the limestones are significantly more abundant in the GL2 area and on the Property overall than previously represented. This was supported by observations from the air on May 11, 2019."
+                },
+                "relationships": [
+                    {
+                        "src": "limestone unit",
+                        "relationship_type": "att_bedform",
+                        "dst": "shallowly dipping",
+                        "reasoning": "The text describes a limestone unit with a specific characteristic ('high-grade Cu-Au-Ag skarn style mineralization') and a lithologic characteristic ('shallowly dipping')."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620e6879ad0e9c819b0c3000",
+                    "hashed_text": "153f04d498ecaef7d045f73a9312d0b17f7072aa16fcb5bd98db17fe919b9f7f",
+                    "weaviate_id": "000191ac-9c27-47e1-aaec-f0fd23ca12ee",
+                    "paragraph_text": "As noted by Lang et al (2003), the early Eocene Mount Skukum volcanic complex, part of the widespread late Paleocene to early Eocene felsic to intermediate volcanism of the Skukum Group (Smith, 1982 and 1983; Pride, 1986), is a caldera sequence that underlies the western portion of the district. The Mount Skukum complex consists of up to 800 metres of mainly porphyritic andesitic flows and tuff exposed over an area of approximately 200 km2. These volcanic rocks are locally separated from pre-Tertiary rocks by curved, east- to northeasttrending structures such as Berney Creek fault and Wheaton lineament (coincident with the Wheaton River valley on Figure 5) that have been inferred to be syn-volcanic, calderabounding faults (Hart and Radloff, 1990). These and parallel structures host gold-silver mineralization in the district (Naas, 2007)."
+                },
+                "relationships": [
+                    {
+                        "src": "Mount Skukum complex",
+                        "relationship_type": "strat_name_to_lith",
+                        "dst": "andesitic flows and tuff",
+                        "reasoning": "The text describes the Mount Skukum complex as consisting of 'mainly porphyritic andesitic flows and tuff', clearly associating the lithology (andesitic flows and tuff) with the stratigraphic unit (Mount Skukum complex)."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620e687dad0e9c819b0c3397",
+                    "hashed_text": "32ff6bf7c5a550c7bdbd815939c6293a7bae1723314e50307a4b718f6f000e4f",
+                    "weaviate_id": "0002140d-8e54-4f0b-bc7a-9196254589ac",
+                    "paragraph_text": "The genesis of the uranium deposits within or near the present limits of the Athabasca sandstone limits are well documented. It is worth noting that the current limits of the Athabasca sandstone near the north shore of Athabasca Lake has been moved northwards in the area around Nicholson Bay and Fish Hook Bay areas. The new locations of outliers of the sandstone, explains the location and the depositional nature of the gold and platinum group metals associated with the pitchblende deposits of both simple and complex mineralogy.\nThe compilation of exploration activities and the available information have resulted in the development of the geological environmental models for uranium, gold and goldplatinum group mineralization. It is apparent that some of the mineral occurrences may have similarities to more than one model type and indicates the complex geological setting involved."
+                },
+                "relationships": [
+                    {
+                        "src": "Athabasca sandstone",
+                        "relationship_type": "strat_name_to_lith",
+                        "dst": "gold and platinum group metals",
+                        "reasoning": "The text mentions the Athabasca sandstone, which is a stratigraphic unit, and the presence of certain minerals within it, specifically 'gold and platinum group metals'."
+                    }
+                ]
+            },
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620f2eb5ad0e9c819b108c85",
+                    "hashed_text": "2a045341a5b68054aaadec84db3603e81cfe6d24ef979e41f1b23245b67e243b",
+                    "weaviate_id": "00022178-edf3-4de7-9242-c01a287b622b",
+                    "paragraph_text": "Significant silver-lead-zinc intercepts have been reported from the US Borax drill program. However, the orientation of the drilling was not suitable for evaluating what appears to be a steeply dipping system. The orientation of mineralization and the relationship between sample length and true thickness could not be determined from the US Borax drill results. The author did not attempt any resource calculations.\nThree distinct styles of possible mineralization in the Utah Clipper area can be discerned from the work to date:\n1. An igneous assemblage of lead-antimony-silver-bismuth-zinc in rock and soil associated with vein-style lead-silver mineralization is distributed around the perimeter of an inferred intrusion situated at depth beneath the western boundary of the property. The abandoned Clipper, Utah, and Vista mines were all established to exploit these veins. Clipper and Utah mines are located on the Utah Clipper property. Vista mine is situated 250m west of the property. Surface sampling and historical mining show that high grade silver values in excess of 100 gpt Ag can be obtained from wide-spaced, very narrow (2-30cm) steeply dipping quartz-sulphide veins cutting sandstone, chert, and quartzite. US Borax conducted a program of shallow vertical rotary drilling to investigate whether near surface bulk mineable silver could be located in the Clipper mine area."
+                },
+                "relationships": [
+                    {
+                        "src": "sandstone, chert, and quartzite",
+                        "relationship_type": "att_bedform",
+                        "dst": "quartz-sulphide veins",
+                        "reasoning": "The text mentions 'sandstone', 'chert', and 'quartzite' as lithologies that are cut by quartz-sulphide veins."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620d2303ad0e9c819b062515",
+                    "hashed_text": "815d35255df08eed58809525bb4fae981ae5026b502bd8b84de936c897d5db52",
+                    "weaviate_id": "0001e912-92d6-40cb-8b85-29aee2525e87",
+                    "paragraph_text": "Scott Wilson RPA understands that systematic density measurements were made on drill core by staff of Priargunsky, and the average value used in estimation of mineral resources of the No. 7 Deposit (the 7a horizon in the old terminology) is 2.60 g/cc (Rogov and Yurchenko, 1987).\nIn preparation for the recently completed geophysical (gravity) survey, Khan carried out a number of density measurements on various rock types in the Dornod area. The average value of two measurements of siltstones, the rock type which hosts the uranium mineralization at Dornod, is 2.575 g/cc, which is less than a 1% variance from the historical reported value. Scott Wilson RPA has retained the old value of 2.60 g/cc and used it in the current resource update."
+                },
+                "relationships": [
+                    {
+                        "src": "siltstones",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "2.575 g/cc",
+                        "reasoning": "The text specifies the average density of siltstones as 2.575 g/cc, which is a property of the lithology (siltstones)."
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "run_id": "TEST_RUN_2024-09-25_02:15:46",
+        "extraction_pipeline_id": "0",
+        "model_name": "meta-llama/Meta-Llama-3-8B-Instruct",
+        "model_version": 0,
+        "results": [
+            {
+                "text": {
+                    "text_type": "weaviate_text",
+                    "preprocessor_id": "haystack_v0.0.2",
+                    "paper_id": "620e8f79ad0e9c819b0d5a38",
+                    "hashed_text": "5d9a50ee45dd2bfd37499e46d63c6b3bcd9ac60553ea0d2aa17c5ebe4a5cb004",
+                    "weaviate_id": "0002452b-841e-447e-8f4c-556bd454dd85",
+                    "paragraph_text": "Type 2 flats are subhorizontal QTC fracture-filling veins between two adjacent steep shears. These flats cross lithologies but stop abruptly at the shears. They can extend 200 to 300 m.\nType 3 flats are subhorizontal QTC veins that cross all lithologies and steep sheared veins, and are known to extend as far as 300 m. When a flat crosses a shear (30 cm www.innovexplo.com to 1 m wide), the shear will generally carry ore values for 3 to 6 m above and below the intersection.\nThe Sigma mine is located south of the Bourlamaque Batholith within the Central Pyroclastic Belt of the Val-dOr Formation (Figs. 7.5). The deposit is hosted by an andesite unit bounded to the north by the north shear, and by volcaniclastic rocks of intermediate composition to the south. The volcanics have been cut by two generations of pre-mineralization porphyry dykes, sills and a large composite stock that ranges in composition from diorite to granodiorite, and by a series of shears."
+                },
+                "relationships": [
+                    {
+                        "src": "Type 2 flats",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "lithologies",
+                        "reasoning": "The text describes 'Type 2 flats' as 'subhorizontal QTC fracture-filling veins' that 'cross lithologies but stop abruptly at the shears', indicating a relationship between the lithology and the type of flat."
+                    },
+                    {
+                        "src": "Type 3 flats",
+                        "relationship_type": "lith_to_lith_type",
+                        "dst": "lithologies",
+                        "reasoning": "The text describes 'Type 3 flats' as 'subhorizontal QTC veins that cross all lithologies and steep sheared veins', indicating a relationship between the lithology and the type of flat."
+                    }
+                ]
+            }
+        ]
+    }
+]

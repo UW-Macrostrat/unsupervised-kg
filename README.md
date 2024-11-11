@@ -18,8 +18,7 @@ This README has the following sections:
 We have provided a Dockerfile that you can use to setup the environment by running the following commands:  
 ```
 $ export CURRENT_DIR=`pwd`
-$ cd docker
-$ docker build -t unsupervised_kg .
+$ docker build -t unsupervised_kg:latest docker/.
 $ docker run --gpus all -d -v $CURRENT_DIR:/working_dir/ --name=unsupervised_kg unsupervised_kg:latest sleep infinity
 $ docker exec -it unsupervised_kg bash
 $ conda activate unsupervised_kg
@@ -139,10 +138,12 @@ To generate the tree on the example text, run the following command in the `tree
 $ python tree_generator.py --model_dir dsarda/span_bert_finetuned_model --input_path tree_example.txt --save_path tree_example.json
 ```
 
+## SpanBERT training
+
 We trained the model using the command:
 ```
 $ cd tree_extraction
-$ python run_macrostart.py --data_dir <datset_dir> --model spanbert-base-cased --do_train --do_eval --train_batch_size 32 --eval_batch_size 32 --learning_rate 2e-5 --num_train_epochs 30 --max_seq_length 512 --output_dir macrostrat_dir
+$ python run_macrostart.py --data_dir <datset_dir> --model spanbert-base-cased --do_train --do_eval --train_batch_size 16 --eval_batch_size 1 --learning_rate 2e-5 --num_train_epochs 1 --max_seq_length 4096 --output_dir <output_dir>
 ```
 
-where `<dataset_dir>` is a path to the finetuning dataset generated when finetuning REBEL. 
+where `<dataset_dir>` is a path to the dataset generated either when finetuning REBEL or by the feedback puller tool. The `<output_dir>` is the directory where we want the trained model weights written to.  
