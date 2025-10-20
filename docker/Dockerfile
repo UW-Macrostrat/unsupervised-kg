@@ -31,6 +31,9 @@ RUN mkdir /working_dir
 WORKDIR /working_dir
 COPY environment.yml environment.yml
 
+RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
+    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+
 RUN conda env create -f environment.yml
 
 ENV TOKENIZERS_PARALLELISM=true

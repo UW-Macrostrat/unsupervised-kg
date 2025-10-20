@@ -45,7 +45,7 @@ which will similarily generate a `html` and `csv` file.
 For the finetuned SpanBERT based model:
 ```
 $ cd tree_extraction
-$ python tree_generator.py --model_dir dsarda/span_bert_finetuned_model --input_path tree_example.txt --save_path tree_example.json
+$ python tree_generator.py --model_dir dsarda/span_bert_finetuned_model --input_dir tree_example.txt --save_dir tree_example_2.json
 ```
 which will save the results to the `tree_example.json` file. 
 
