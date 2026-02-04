@@ -16,7 +16,7 @@ build:
 # Run the Docker container in detached mode
 .PHONY: run
 run:
-	docker run --gpus all -d -v $(CURRENT_DIR):/working_dir/ --name=$(CONTAINER_NAME) $(IMAGE_NAME) sleep infinity
+	docker run -d -v $(CURRENT_DIR):/working_dir/ --name=$(CONTAINER_NAME) $(IMAGE_NAME) sleep infinity
 
 # Open a bash shell in the running container
 .PHONY: exec

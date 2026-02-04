@@ -213,3 +213,5 @@ tree_extraction/map_legend_examples
 tree_extraction/server_input_examples
 tree_extraction/spanbert_macrostrat_finetuned
 tree_extraction/weaviate_example_requests
+tree_extraction/input/
+tree_extraction/output/
