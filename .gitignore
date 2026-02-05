@@ -215,3 +215,5 @@ tree_extraction/spanbert_macrostrat_finetuned
 tree_extraction/weaviate_example_requests
 tree_extraction/input/
 tree_extraction/output/
+
+formation_sample_paragraphs

@@ -21,7 +21,7 @@ run:
 # Open a bash shell in the running container
 .PHONY: exec
 exec:
-	docker exec -it $(CONTAINER_NAME) bash
+	docker exec -it $(CONTAINER_NAME) bash -lc "set -a && source .env && set +a && exec bash"
 
 # Stop and remove the container
 .PHONY: clean
