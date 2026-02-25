@@ -36,4 +36,10 @@ RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkg
 
 RUN conda env create -f environment.yml
 
+RUN /bin/bash -c "source /conda/bin/activate unsupervised_kg && \
+    pip install --upgrade transformers huggingface_hub fastcoref"
+
+RUN /bin/bash -c "source /conda/bin/activate unsupervised_kg && \
+    python -m spacy download en_core_web_lg"
+
 ENV TOKENIZERS_PARALLELISM=true
